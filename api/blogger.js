@@ -1,14 +1,12 @@
-const fetch = require('node-fetch');
-
-const BLOG_ID = '5749811470026327914';
-const BASE = 'https://www.googleapis.com/blogger/v3';
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const BLOG_ID = '5749811470026327914';
+  const BASE = 'https://www.googleapis.com/blogger/v3';
 
   const { action, token, postId, title, content, labels, isDraft } = req.body || {};
 
@@ -47,7 +45,9 @@ export default async function handler(req, res) {
     }
 
     if (action === 'deletePost') {
-      response = await fetch(`${BASE}/blogs/${BLOG_ID}/posts/${postId}`, { method: 'DELETE', headers });
+      response = await fetch(`${BASE}/blogs/${BLOG_ID}/posts/${postId}`, { 
+        method: 'DELETE', headers 
+      });
       if (response.status === 204) return res.json({ success: true });
       data = await response.json();
       return res.json(data);
